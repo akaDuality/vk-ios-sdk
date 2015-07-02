@@ -22,14 +22,23 @@
 
 #import "VKPhoto.h"
 
+@implementation VKCount
+
+
+
+@end
+
+
+
 @implementation VKPhoto
-- (NSString *)attachmentString {
-    return [NSString stringWithFormat:@"photo%@_%@", _owner_id, _id];
+-(NSString *)attachmentString {
+    return [NSString stringWithFormat:@"photo%@_%@",_owner_id, _id];
 }
 @end
 
 @implementation VKPhotoArray
-- (instancetype)initWithDictionary:(NSDictionary *)dict {
+-(instancetype)initWithDictionary:(NSDictionary *)dict
+{
     return [super initWithDictionary:dict objectClass:[VKPhoto class]];
 }
 @end

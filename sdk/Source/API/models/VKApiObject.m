@@ -36,7 +36,7 @@ static NSString *const INT_NAME = @"int";
 static NSString *const DOUBLE_NAME = @"double";
 static NSString *const ID_NAME = @"id";
 
-static NSMutableDictionary * classesProperties = nil;
+
 
 static NSString *getPropertyType(objc_property_t property) {
     const char *type = property_getAttributes(property);
@@ -132,7 +132,14 @@ static NSString *getPropertyName(objc_property_t prop) {
 
 
 
+
+@interface VKApiObject ()
+@property NSMutableDictionary * classesProperties;// = nil;
+@end
+
 @implementation VKApiObject
+
+//static NSMutableDictionary * classesProperties = nil;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     if (self = [super init]) {

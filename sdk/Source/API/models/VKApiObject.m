@@ -157,11 +157,11 @@ static NSString *getPropertyName(objc_property_t prop) {
 - (void)parse:(NSDictionary *)jasonDict {
 //    static dispatch_once_t onceToken;
 //    dispatch_once(&onceToken, ^{
-        classesProperties = [NSMutableDictionary dictionaryWithCapacity:100];
+        _classesProperties = [NSMutableDictionary dictionaryWithCapacity:100];
 //    });
     
     NSString * className = NSStringFromClass(self.class);
-    __block NSMutableDictionary * propDict = [classesProperties objectForKey:className];
+    __block NSMutableDictionary * propDict = [_classesProperties objectForKey:className];
     
     if (!propDict) {
         [self enumPropertiesWithBlock:^(VKPropertyHelper * helper, int totalProps) {
@@ -172,7 +172,7 @@ static NSString *getPropertyName(objc_property_t prop) {
         }];
         
 #warning somtimes crashed here when load dialogs. Возможно, это проблема выполнения в неправильном потоке
-        classesProperties[className] = propDict;
+        _classesProperties[className] = propDict;
     }
     NSMutableArray * warnings = PRINT_PARSE_DEBUG_INFO ? [NSMutableArray new] : nil;
 //        NSLog(@"DICT: %@", dict);

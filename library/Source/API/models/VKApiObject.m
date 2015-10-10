@@ -46,11 +46,13 @@ static NSString *getPropertyType(objc_property_t property) {
     NSString *typeAttribute = [attributes objectAtIndex:0];
     NSString *propertyType = [typeAttribute substringFromIndex:1];
     const char *rawPropertyType = [propertyType UTF8String];
-
+    
+#warning missing CGFloat check?
     if (strcmp(rawPropertyType, @encode(float)) == 0
         || strcmp(rawPropertyType, @encode(double)) == 0) {
         return DOUBLE_NAME;
     }
+    
     else if (strcmp(rawPropertyType, @encode(char)) == 0
              || strcmp(rawPropertyType, @encode(short)) == 0
              || strcmp(rawPropertyType, @encode(int)) == 0
@@ -83,10 +85,10 @@ static NSString *getPropertyName(objc_property_t prop) {
     const char *propCName = property_getName(prop);
     NSString *propertyName =  [NSString stringWithCString:propCName encoding:[NSString defaultCStringEncoding]];
     
-//    NSLog(@"poperty %@", propertyName);
-//    if ([propertyName isEqualToString:@"copy_history"]) {
-//        
-//    }
+    //    NSLog(@"poperty %@", propertyName);
+    //    if ([propertyName isEqualToString:@"copy_history"]) {
+    //
+    //    }
     return propertyName;
 }
 
@@ -134,12 +136,10 @@ static NSString *getPropertyName(objc_property_t prop) {
 
 
 @interface VKApiObject ()
-@property NSMutableDictionary * classesProperties;// = nil;
+@property NSMutableDictionary * classesProperties;
 @end
 
 @implementation VKApiObject
-
-//static NSMutableDictionary * classesProperties = nil;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     if (self = [super init]) {
@@ -157,12 +157,12 @@ static NSString *getPropertyName(objc_property_t prop) {
 - (void)parse:(NSDictionary *)dict {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        classesProperties = [NSMutableDictionary dictionary];
+        _classesProperties = [NSMutableDictionary dictionary];
     });
     NSString *className = NSStringFromClass(self.class);
     __block NSMutableDictionary *propDict = nil;
-    @synchronized (classesProperties) {
-        propDict = [classesProperties objectForKey:className];
+    @synchronized (_classesProperties) {
+        propDict = [_classesProperties objectForKey:className];
     }
     if (!propDict) {
         [self enumPropertiesWithBlock:^(VKPropertyHelper * helper, int totalProps) {
@@ -174,19 +174,46 @@ static NSString *getPropertyName(objc_property_t prop) {
         if (!propDict) {
             propDict = [NSMutableDictionary new];
         }
-        @synchronized (classesProperties) {
-            classesProperties[className] = propDict;
+        @synchronized (_classesProperties) {
+            _classesProperties[className] = propDict;
         }
     }
     NSMutableArray *warnings = PRINT_PARSE_DEBUG_INFO ? [NSMutableArray new] : nil;
-    for (NSString *key in dict) {
-        VKPropertyHelper *propHelper = propDict[key];
-        if (!propHelper) continue;
+    for (__strong NSString *key in dict) {
         id resultObject = nil;
         id parseObject = dict[key];
+        VKPropertyHelper *propHelper = propDict[key];
+        if (!propHelper) {
+            // Если свойство не найдено
+            // Проверим среди сменившихся имён
+            if ([key isEqualToString:@"copy_history"]) {
+                key = @"history";
+            } else if ([key isEqualToString:@"description"]){
+                key = @"descriptionVK";
+            } else if ([key isEqualToString:@"new_pts"]){
+                key = @"pts";
+            }
+            propHelper = [propDict objectForKey:key];
+            // Если не нашли — сообщаем
+            if (!propHelper) {
+#warning uncomment if needed
+                //                NSLog(@"CONTINUE on key %@", key);
+                continue;
+            }
+        };
+        
+        if ([key isEqualToString:@"description"]) {
+            NSLog(@"%@", parseObject);
+        }
+        
         NSString *propertyName = propHelper.propertyName;
-        Class <VKApiObject> propertyClass = propHelper.propertyClass;
-        if (propHelper.isModelsArray) {
+        Class propertyClass = propHelper.propertyClass;
+        
+        if (propHelper.isPrimitive) {
+            //NSLog(@"isPrimitive");
+            [self setValue:parseObject forKey:propertyName];
+            continue;
+        } else if (propHelper.isModelsArray) {
             if ([parseObject isKindOfClass:[NSDictionary class]]) {
                 //NSLog(@"%@ isModelsArray-[NSDictionary class]", NSStringFromClass(propHelper.propertyClass));
                 resultObject = [[propertyClass alloc] initWithDictionary:parseObject];
@@ -203,11 +230,17 @@ static NSString *getPropertyName(objc_property_t prop) {
         }
         else if (propHelper.isModel) {
             if ([parseObject isKindOfClass:[NSDictionary class]]) {
-                resultObject = [propertyClass createWithDictionary:parseObject];
+                //NSLog(@"isModel-[NSDictionary class]");
+                //                resultObject = [propertyClass createWithDictionary:parseObject];
+                resultObject = [[propertyClass alloc] initWithDictionary:parseObject];
+                
             } else if ([parseObject isKindOfClass:[NSArray class]]) {
-                resultObject = [propertyClass createWithArray:parseObject];
+                //NSLog(@"isModel-[NSArray class]");
+//                resultObject = [propertyClass createWithArray:parseObject];
+                resultObject = [[propertyClass alloc] initWithArray:parseObject objectClass:[self properClassForClass:propHelper.propertyClass]];
             }
             else {
+                //NSLog(@"isModel-else");
                 if (PRINT_PARSE_DEBUG_INFO) {
                     [warnings addObject:[NSString stringWithFormat:@"property %@ is parcelable, but data is not", propertyName]];
                 }
@@ -231,7 +264,7 @@ static NSString *getPropertyName(objc_property_t prop) {
         }
         [self setValue:resultObject forKey:propertyName];
     }
-
+    
     if (PRINT_PARSE_DEBUG_INFO && warnings.count) {
         NSLog(@"Parsing %@ complete. Warnings: %@", self, warnings);
     }

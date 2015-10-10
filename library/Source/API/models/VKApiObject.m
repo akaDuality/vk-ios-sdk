@@ -24,6 +24,8 @@
 #import "VKApiObject.h"
 #import "VKApiObjectArray.h"
 
+
+
 #ifdef DEBUG
 #define PRINT_PARSE_DEBUG_INFO YES
 #else
@@ -35,13 +37,13 @@ static NSString *const DOUBLE_NAME = @"double";
 static NSString *const BOOL_NAME = @"bool";
 static NSString *const ID_NAME = @"id";
 
-static NSMutableDictionary *classesProperties = nil;
+
 
 static NSString *getPropertyType(objc_property_t property) {
     const char *type = property_getAttributes(property);
     NSString *typeString = [NSString stringWithUTF8String:type];
     NSArray *attributes = [typeString componentsSeparatedByString:@","];
-    NSString *typeAttribute = attributes[0];
+    NSString *typeAttribute = [attributes objectAtIndex:0];
     NSString *propertyType = [typeAttribute substringFromIndex:1];
     const char *rawPropertyType = [propertyType UTF8String];
 
@@ -67,34 +69,43 @@ static NSString *getPropertyType(objc_property_t property) {
     else if (strcmp(rawPropertyType, @encode(id)) == 0) {
         return ID_NAME;
     }
-
+    
     if ([typeAttribute hasPrefix:@"T@"] && [typeAttribute length] > 1) {
         NSString *typeClassName = [typeAttribute substringWithRange:NSMakeRange(3, [typeAttribute length] - 4)];  //turns @"NSDate" into NSDate
         if (typeClassName != nil) {
             return typeClassName;
         }
     }
-
+    
     return nil;
 }
-
 static NSString *getPropertyName(objc_property_t prop) {
-    const char *propName = property_getName(prop);
-    return [NSString stringWithCString:propName encoding:[NSString defaultCStringEncoding]];
+    const char *propCName = property_getName(prop);
+    NSString *propertyName =  [NSString stringWithCString:propCName encoding:[NSString defaultCStringEncoding]];
+    
+//    NSLog(@"poperty %@", propertyName);
+//    if ([propertyName isEqualToString:@"copy_history"]) {
+//        
+//    }
+    return propertyName;
 }
 
+
+
+
 @interface VKPropertyHelper ()
-@property(nonatomic, assign) objc_property_t property;
-@property(nonatomic, readwrite, strong) NSString *propertyName;
-@property(nonatomic, readwrite, strong) NSString *propertyClassName;
-@property(nonatomic, readwrite, strong) Class propertyClass;
+@property (nonatomic, assign) objc_property_t property;
+@property (nonatomic, readwrite, strong) NSString *propertyName;
+@property (nonatomic, readwrite, strong) NSString *propertyClassName;
+@property (nonatomic, readwrite, strong) Class propertyClass;
 
-@property(nonatomic, readwrite, assign) BOOL isPrimitive;
-@property(nonatomic, readwrite, assign) BOOL isModelsArray;
-@property(nonatomic, readwrite, assign) BOOL isModel;
+@property (nonatomic, readwrite, assign) BOOL isPrimitive;
+@property (nonatomic, readwrite, assign) BOOL isModelsArray;
+@property (nonatomic, readwrite, assign) BOOL isModel;
 
-- (instancetype)initWith:(objc_property_t)prop;
+-(instancetype) initWith:(objc_property_t) prop;
 @end
+
 
 @implementation VKPropertyHelper
 
@@ -114,16 +125,31 @@ static NSString *getPropertyName(objc_property_t prop) {
     }
     return self;
 }
+@end
 
 
+
+
+
+
+
+@interface VKApiObject ()
+@property NSMutableDictionary * classesProperties;// = nil;
 @end
 
 @implementation VKApiObject
 
+//static NSMutableDictionary * classesProperties = nil;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
-    if ((self = [super init])) {
-        [self parse:dict];
-        self.fields = dict;
+    if (self = [super init]) {
+        id response = dict[@"response"];
+        if (response){
+            //NSLog(@"response: %@", response);
+            [self parse:response];
+        } else {
+            [self parse:dict];
+        }
     }
     return self;
 }
@@ -139,9 +165,10 @@ static NSString *getPropertyName(objc_property_t prop) {
         propDict = [classesProperties objectForKey:className];
     }
     if (!propDict) {
-        [self enumPropertiesWithBlock:^(VKPropertyHelper *helper, int totalProps) {
-            if (!propDict)
+        [self enumPropertiesWithBlock:^(VKPropertyHelper * helper, int totalProps) {
+            if (!propDict){
                 propDict = [NSMutableDictionary dictionaryWithCapacity:totalProps];
+            }
             propDict[helper.propertyName] = helper;
         }];
         if (!propDict) {
@@ -161,10 +188,12 @@ static NSString *getPropertyName(objc_property_t prop) {
         Class <VKApiObject> propertyClass = propHelper.propertyClass;
         if (propHelper.isModelsArray) {
             if ([parseObject isKindOfClass:[NSDictionary class]]) {
-                resultObject = [propertyClass createWithDictionary:parseObject];
+                //NSLog(@"%@ isModelsArray-[NSDictionary class]", NSStringFromClass(propHelper.propertyClass));
+                resultObject = [[propertyClass alloc] initWithDictionary:parseObject];
             }
             else if ([parseObject isKindOfClass:[NSArray class]]) {
-                resultObject = [propertyClass createWithArray:parseObject];
+                //NSLog(@"%@ isModelsArray-[NSArray class]", NSStringFromClass(propHelper.propertyClass));
+                resultObject = [[propertyClass alloc] initWithArray:parseObject objectClass:[self properClassForClass:propHelper.propertyClass]];
             }
             else {
                 if (PRINT_PARSE_DEBUG_INFO) {
@@ -185,6 +214,7 @@ static NSString *getPropertyName(objc_property_t prop) {
             }
         }
         else {
+            //NSLog(@"else");
             resultObject = parseObject;
             if (propertyClass && ![resultObject isKindOfClass:propertyClass]) {
                 if ([(Class)propertyClass isSubclassOfClass:[NSString class]]) {
@@ -207,7 +237,54 @@ static NSString *getPropertyName(objc_property_t prop) {
     }
 }
 
-- (void)enumPropertiesWithBlock:(void (^)(VKPropertyHelper *helper, int totalProps))processBlock {
+- (Class)properClassForClass:(Class)class{
+    Class result = class;
+    NSString *className = NSStringFromClass(class);
+    NSString *resultClassName = className;
+    
+    if([className isEqualToString:@"ADVKNewsItemArray"]){
+        resultClassName = @"ADVKNewsItem";
+    }
+    else if([className isEqualToString:@"VKGroups"]){
+        resultClassName = @"VKGroup";
+    }
+    else if([className isEqualToString:@"VKUsersArray"]){
+        resultClassName = @"VKUser";
+    }
+    else if([className isEqualToString:@"ADVKAttachmentArray"]){
+        resultClassName = @"ADVKAttachment";
+    }
+    else if([className isEqualToString:@"VKMessageRespondArray"]){
+        resultClassName = @"VKMessageRespond";
+    }
+    else if([className isEqualToString:@"VKMessageArray"]){
+        resultClassName = @"VKMessage";
+    }
+    else if([className isEqualToString:@"VKPostArray"]){
+        resultClassName = @"VKPost";
+    }
+    else if([className isEqualToString:@"VKPollAnswersArray"]){
+        resultClassName = @"VKPollAnswer";
+    }
+    else if([className isEqualToString:@"VKUserCommentArray"]){
+        resultClassName = @"VKUserComment";
+    }
+    else if([className isEqualToString:@"VKAudios"]){
+        resultClassName = @"VKAudio";
+    }
+    else if([className isEqualToString:@"VKPhotoSizes"]){
+        resultClassName = @"VKPhotoSize";
+    }
+    else{
+        NSLog(@"Don't know how to parse array %@", className);
+    }
+    
+    result = NSClassFromString(resultClassName);
+    
+    return result;
+}
+
+- (void)enumPropertiesWithBlock:(void (^)(VKPropertyHelper * helper, int totalProps))processBlock {
     unsigned int propertiesCount;
     //Get all properties of current class
     Class searchClass = [self class];
@@ -215,9 +292,12 @@ static NSString *getPropertyName(objc_property_t prop) {
     NSArray *ignoredProperties = [self ignoredProperties];
     while (lastViewedClass != [VKApiObject class]) {
         objc_property_t *properties = class_copyPropertyList(searchClass, &propertiesCount);
-
+        
         for (int i = 0; i < propertiesCount; i++) {
             objc_property_t property = properties[i];
+            
+            //NSLog(@"enumPropertiesWithBlock %@: %s", NSStringFromClass(searchClass), property_getName(property));
+            
             VKPropertyHelper *helper = [[VKPropertyHelper alloc] initWith:property];
             if ([ignoredProperties containsObject:helper.propertyName])
                 continue;
@@ -236,8 +316,8 @@ static NSString *getPropertyName(objc_property_t prop) {
 
 - (NSMutableDictionary *)serialize {
     NSMutableDictionary *result = [NSMutableDictionary new];
-
-    [self enumPropertiesWithBlock:^(VKPropertyHelper *helper, int total) {
+    
+    [self enumPropertiesWithBlock: ^(VKPropertyHelper * helper, int total) {
         if (![self valueForKey:helper.propertyName])
             return;
         Class propertyClass = NSClassFromString(helper.propertyClassName);
@@ -245,10 +325,10 @@ static NSString *getPropertyName(objc_property_t prop) {
             [[self valueForKey:helper.propertyName] serializeTo:result withName:helper.propertyName];
         }
         else if ([propertyClass isSubclassOfClass:[VKApiObject class]]) {
-            result[helper.propertyName] = [[self valueForKey:helper.propertyName] serialize];
+            [result setObject:[[self valueForKey:helper.propertyName] serialize] forKey:helper.propertyName];
         }
         else {
-            result[helper.propertyName] = [self valueForKey:helper.propertyName];
+            [result setObject:[self valueForKey:helper.propertyName] forKey:helper.propertyName];
         }
     }];
     return result;

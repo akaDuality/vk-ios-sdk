@@ -23,6 +23,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface VKObject : NSObject
+@interface VKObject : NSObject <NSCoding>
+
+- (BOOL)saveToDiskWithKey:(NSString *)key;
++ (id)loadFromDiskWithKey:(NSString *)key;
 
 @end

@@ -50,20 +50,20 @@ static NSString *getPropertyType(objc_property_t property) {
     
 #warning missing CGFloat check?
     if (strcmp(rawPropertyType, @encode(float)) == 0
-            || strcmp(rawPropertyType, @encode(double)) == 0) {
+        || strcmp(rawPropertyType, @encode(double)) == 0) {
         return DOUBLE_NAME;
     }
     
     else if (strcmp(rawPropertyType, @encode(char)) == 0
-            || strcmp(rawPropertyType, @encode(short)) == 0
-            || strcmp(rawPropertyType, @encode(int)) == 0
-            || strcmp(rawPropertyType, @encode(long)) == 0
-            || strcmp(rawPropertyType, @encode(long long)) == 0
-            || strcmp(rawPropertyType, @encode(unsigned char)) == 0
-            || strcmp(rawPropertyType, @encode(unsigned short)) == 0
-            || strcmp(rawPropertyType, @encode(unsigned int)) == 0
-            || strcmp(rawPropertyType, @encode(unsigned long)) == 0
-            || strcmp(rawPropertyType, @encode(unsigned long long)) == 0) {
+             || strcmp(rawPropertyType, @encode(short)) == 0
+             || strcmp(rawPropertyType, @encode(int)) == 0
+             || strcmp(rawPropertyType, @encode(long)) == 0
+             || strcmp(rawPropertyType, @encode(long long)) == 0
+             || strcmp(rawPropertyType, @encode(unsigned char)) == 0
+             || strcmp(rawPropertyType, @encode(unsigned short)) == 0
+             || strcmp(rawPropertyType, @encode(unsigned int)) == 0
+             || strcmp(rawPropertyType, @encode(unsigned long)) == 0
+             || strcmp(rawPropertyType, @encode(unsigned long long)) == 0) {
         return INT_NAME;
     }
     else if (strcmp(rawPropertyType, @encode(BOOL)) == 0) {
@@ -118,7 +118,7 @@ static NSString *getPropertyName(objc_property_t prop) {
         _propertyName = getPropertyName(prop);
         _propertyClassName = getPropertyType(self.property);
         _isPrimitive = [@[DOUBLE_NAME, INT_NAME, BOOL_NAME] containsObject:_propertyClassName];
-
+        
         if (!_isPrimitive) {
             _propertyClass = NSClassFromString(_propertyClassName);
             if (!(_isModelsArray = [_propertyClass isSubclassOfClass:[VKApiObjectArray class]])) {
@@ -148,15 +148,11 @@ static NSString *getPropertyName(objc_property_t prop) {
         return nil;
     }
     if ((self = [super init])) {
-//        id response = dict[@"response"];
-//        if (response){
-//            //NSLog(@"response: %@", response);
-//            [self parse:response];
-//        } else {
-//            [self parse:dict];
-//        }
-        [self parse:dict];
-        self.fields = dict;
+        id response = dict[@"response"];
+        if (response)
+            [self parse:response];
+        else
+            [self parse:dict];
     }
     return self;
 }
@@ -243,7 +239,7 @@ static NSString *getPropertyName(objc_property_t prop) {
                 
             } else if ([parseObject isKindOfClass:[NSArray class]]) {
                 //NSLog(@"isModel-[NSArray class]");
-//                resultObject = [propertyClass createWithArray:parseObject];
+                //                resultObject = [propertyClass createWithArray:parseObject];
                 resultObject = [[propertyClass alloc] initWithArray:parseObject objectClass:[self properClassForClass:propHelper.propertyClass]];
             }
             else {

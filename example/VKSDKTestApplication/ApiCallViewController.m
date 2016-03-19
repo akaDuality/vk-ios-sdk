@@ -28,22 +28,25 @@
 
 @implementation ApiCallViewController
 
+- (void)dealloc {
+    [self.callingRequest cancel];
+}
+
 - (void)viewDidLoad {
-	[super viewDidLoad];
-	self.methodName.text = self.callingRequest.methodName;
+    [super viewDidLoad];
+    self.methodName.text = self.callingRequest.methodName;
     self.callingRequest.debugTiming = YES;
     self.callingRequest.requestTimeout = 10;
-	[self.callingRequest executeWithResultBlock: ^(VKResponse *response) {
-	    self.callResult.text = [NSString stringWithFormat:@"Result: %@", response];
-	    self.callingRequest = nil;
+
+    __weak __typeof(self) welf = self;
+    [self.callingRequest executeWithResultBlock:^(VKResponse *response) {
+        welf.callResult.text = [NSString stringWithFormat:@"Result: %@", response];
+        welf.callingRequest = nil;
         NSLog(@"%@", response.request.requestTiming);
-	} errorBlock: ^(NSError *error) {
-	    self.callResult.text = [NSString stringWithFormat:@"Error: %@", error];
-	    self.callingRequest = nil;
-	}];
-}
-- (void)viewWillDisappear:(BOOL)animated {
-    [self.callingRequest cancel];
+    }                                errorBlock:^(NSError *error) {
+        welf.callResult.text = [NSString stringWithFormat:@"Error: %@", error];
+        welf.callingRequest = nil;
+    }];
 }
 
 @end

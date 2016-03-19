@@ -23,6 +23,7 @@
 #import <objc/runtime.h>
 #import "VKApiObject.h"
 #import "VKApiObjectArray.h"
+#import "VKUtil.h"
 
 
 
@@ -49,20 +50,20 @@ static NSString *getPropertyType(objc_property_t property) {
     
 #warning missing CGFloat check?
     if (strcmp(rawPropertyType, @encode(float)) == 0
-        || strcmp(rawPropertyType, @encode(double)) == 0) {
+            || strcmp(rawPropertyType, @encode(double)) == 0) {
         return DOUBLE_NAME;
     }
     
     else if (strcmp(rawPropertyType, @encode(char)) == 0
-             || strcmp(rawPropertyType, @encode(short)) == 0
-             || strcmp(rawPropertyType, @encode(int)) == 0
-             || strcmp(rawPropertyType, @encode(long)) == 0
-             || strcmp(rawPropertyType, @encode(long long)) == 0
-             || strcmp(rawPropertyType, @encode(unsigned char)) == 0
-             || strcmp(rawPropertyType, @encode(unsigned short)) == 0
-             || strcmp(rawPropertyType, @encode(unsigned int)) == 0
-             || strcmp(rawPropertyType, @encode(unsigned long)) == 0
-             || strcmp(rawPropertyType, @encode(unsigned long long)) == 0) {
+            || strcmp(rawPropertyType, @encode(short)) == 0
+            || strcmp(rawPropertyType, @encode(int)) == 0
+            || strcmp(rawPropertyType, @encode(long)) == 0
+            || strcmp(rawPropertyType, @encode(long long)) == 0
+            || strcmp(rawPropertyType, @encode(unsigned char)) == 0
+            || strcmp(rawPropertyType, @encode(unsigned short)) == 0
+            || strcmp(rawPropertyType, @encode(unsigned int)) == 0
+            || strcmp(rawPropertyType, @encode(unsigned long)) == 0
+            || strcmp(rawPropertyType, @encode(unsigned long long)) == 0) {
         return INT_NAME;
     }
     else if (strcmp(rawPropertyType, @encode(BOOL)) == 0) {
@@ -117,7 +118,7 @@ static NSString *getPropertyName(objc_property_t prop) {
         _propertyName = getPropertyName(prop);
         _propertyClassName = getPropertyType(self.property);
         _isPrimitive = [@[DOUBLE_NAME, INT_NAME, BOOL_NAME] containsObject:_propertyClassName];
-        
+
         if (!_isPrimitive) {
             _propertyClass = NSClassFromString(_propertyClassName);
             if (!(_isModelsArray = [_propertyClass isSubclassOfClass:[VKApiObjectArray class]])) {
@@ -142,14 +143,20 @@ static NSString *getPropertyName(objc_property_t prop) {
 @implementation VKApiObject
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
-    if (self = [super init]) {
-        id response = dict[@"response"];
-        if (response){
-            //NSLog(@"response: %@", response);
-            [self parse:response];
-        } else {
-            [self parse:dict];
-        }
+    dict = VK_ENSURE_DICT(dict);
+    if (!dict) {
+        return nil;
+    }
+    if ((self = [super init])) {
+//        id response = dict[@"response"];
+//        if (response){
+//            //NSLog(@"response: %@", response);
+//            [self parse:response];
+//        } else {
+//            [self parse:dict];
+//        }
+        [self parse:dict];
+        self.fields = dict;
     }
     return self;
 }
@@ -250,7 +257,7 @@ static NSString *getPropertyName(objc_property_t prop) {
             //NSLog(@"else");
             resultObject = parseObject;
             if (propertyClass && ![resultObject isKindOfClass:propertyClass]) {
-                if ([(Class)propertyClass isSubclassOfClass:[NSString class]]) {
+                if ([(Class) propertyClass isSubclassOfClass:[NSString class]]) {
                     resultObject = [resultObject respondsToSelector:@selector(stringValue)] ? [resultObject stringValue] : nil;
                 } else {
                     resultObject = nil;
@@ -375,7 +382,7 @@ static NSString *getPropertyName(objc_property_t prop) {
     return nil;
 }
 
--(void)setValue:(id)value forUndefinedKey:(NSString *)key {
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
     if (PRINT_PARSE_DEBUG_INFO) {
         NSLog(@"Parser tried to set value (%@) for undefined key (%@)", value, key);
     }

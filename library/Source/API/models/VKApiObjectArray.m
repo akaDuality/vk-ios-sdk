@@ -140,6 +140,28 @@
 + (instancetype)createWithArray:(NSArray *)array {
     return [[self alloc] initWithArray:array];
 }
+
+
+
+
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    if (self) {
+
+        self.count = [[aDecoder decodeObjectForKey:@"count"] integerValue];
+        self.items = [aDecoder decodeObjectForKey:@"items"];
+        
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [super encodeWithCoder:aCoder];
+    
+    [aCoder encodeObject:@(self.count) forKey:@"count"];
+    [aCoder encodeObject:self.items forKey:@"items"];
+}
+
 - (NSString *)description{
     NSMutableString *description = [[NSMutableString alloc] init];
     

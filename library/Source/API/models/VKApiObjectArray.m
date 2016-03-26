@@ -140,4 +140,14 @@
 + (instancetype)createWithArray:(NSArray *)array {
     return [[self alloc] initWithArray:array];
 }
+- (NSString *)description{
+    NSMutableString *description = [[NSMutableString alloc] init];
+    
+    [description appendFormat:@"<%@: %ld items>\n", NSStringFromClass([self class]), (long)self.items.count];
+    for (VKApiObject *object in self.items) {
+        [description appendFormat:@"\t%@\n", object.description];
+    }
+    
+    return description;
+}
 @end

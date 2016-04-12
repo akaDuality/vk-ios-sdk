@@ -67,6 +67,9 @@
     #warning Create Tags property
     @property VKCount *tags;
 
+    @property UIImage *uploadingObject;
+    @property float uploadingProgress;
+
 @end
 
 

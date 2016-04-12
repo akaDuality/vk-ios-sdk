@@ -32,3 +32,4 @@
 #import "VKUniversity.h"
 #import "VKGroup.h"
 #import "VKDocs.h"
+#import "VKVideo.h"

@@ -278,8 +278,8 @@ static NSString *getPropertyName(objc_property_t prop) {
     NSString *className = NSStringFromClass(class);
     NSString *resultClassName = className;
     
-    if([className isEqualToString:@"ADVKNewsItemArray"]){
-        resultClassName = @"ADVKNewsItem";
+    if([className isEqualToString:@"VKNewsItemArray"]){
+        resultClassName = @"VKNewsItem";
     }
     else if([className isEqualToString:@"VKGroups"]){
         resultClassName = @"VKGroup";

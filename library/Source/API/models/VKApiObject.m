@@ -314,6 +314,9 @@ static NSString *getPropertyName(objc_property_t prop) {
     else if([className isEqualToString:@"VKNewsBaseArray"]){
         resultClassName = @"VKNewsBase";
     }
+    else if([className isEqualToString:@"VKUserTypeListArray"]){
+        resultClassName = @"VKUserTypeList";
+    }
     else{
         NSLog(@"☎️☎️☎️Don't know how to parse array %@", className);
     }

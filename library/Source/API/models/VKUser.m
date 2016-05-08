@@ -44,7 +44,9 @@
 @end
 
 @implementation VKUsersArray
-- (instancetype)initWithDictionary:(NSDictionary *)dict {
-    return [super initWithDictionary:dict objectClass:[VKUser class]];
+
++ (Class)objectClass{
+    return [VKUser class];
 }
+
 @end

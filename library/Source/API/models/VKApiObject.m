@@ -185,29 +185,30 @@ static NSString *getPropertyName(objc_property_t prop) {
     for (__strong NSString *key in dict) {
         id resultObject = nil;
         id parseObject = dict[key];
+        
+        // Key exchange
+        if ([key isEqualToString:@"copy_history"]) {
+            key = @"history";
+        } else if ([key isEqualToString:@"description"]){
+            key = @"descriptionVK";
+        } else if ([key isEqualToString:@"new_pts"]){
+            key = @"pts";
+        }
+        
         VKPropertyHelper *propHelper = propDict[key];
         if (!propHelper) {
             // Если свойство не найдено
             // Проверим среди сменившихся имён
-            if ([key isEqualToString:@"copy_history"]) {
-                key = @"history";
-            } else if ([key isEqualToString:@"description"]){
-                key = @"descriptionVK";
-            } else if ([key isEqualToString:@"new_pts"]){
-                key = @"pts";
-            }
-            propHelper = [propDict objectForKey:key];
             // Если не нашли — сообщаем
             if (!propHelper) {
-#warning uncomment if needed
-                //                NSLog(@"CONTINUE on key %@", key);
+                NSLog(@"😡 Missed key %@ in class %@", key, className);
                 continue;
             }
         };
         
-        if ([key isEqualToString:@"description"]) {
-            NSLog(@"%@", parseObject);
-        }
+//        if ([key isEqualToString:@"description"]) {
+//            NSLog(@"%@", parseObject);
+//        }
         
         NSString *propertyName = propHelper.propertyName;
         Class propertyClass = propHelper.propertyClass;
@@ -223,7 +224,7 @@ static NSString *getPropertyName(objc_property_t prop) {
             }
             else if ([parseObject isKindOfClass:[NSArray class]]) {
                 //NSLog(@"%@ isModelsArray-[NSArray class]", NSStringFromClass(propHelper.propertyClass));
-                resultObject = [[propertyClass alloc] initWithArray:parseObject objectClass:[self properClassForClass:propHelper.propertyClass]];
+                resultObject = [[propertyClass alloc] initWithArray:parseObject objectClass:[self itemClassForArrayClass:propHelper.propertyClass]];
             }
             else {
                 if (PRINT_PARSE_DEBUG_INFO) {
@@ -240,7 +241,7 @@ static NSString *getPropertyName(objc_property_t prop) {
             } else if ([parseObject isKindOfClass:[NSArray class]]) {
                 //NSLog(@"isModel-[NSArray class]");
                 //                resultObject = [propertyClass createWithArray:parseObject];
-                resultObject = [[propertyClass alloc] initWithArray:parseObject objectClass:[self properClassForClass:propHelper.propertyClass]];
+                resultObject = [[propertyClass alloc] initWithArray:parseObject objectClass:[self itemClassForArrayClass:propHelper.propertyClass]];
             }
             else {
                 //NSLog(@"isModel-else");
@@ -273,51 +274,14 @@ static NSString *getPropertyName(objc_property_t prop) {
     }
 }
 
-- (Class)properClassForClass:(Class)class{
-    Class result = class;
-    NSString *className = NSStringFromClass(class);
+- (Class)itemClassForArrayClass:(Class)arrayClass{
+    Class result = arrayClass;
+    NSString *className = NSStringFromClass(arrayClass);
     NSString *resultClassName = className;
     
-    if([className isEqualToString:@"VKNewsItemArray"]){
-        resultClassName = @"VKNewsItem";
-    }
-    else if([className isEqualToString:@"VKGroups"]){
-        resultClassName = @"VKGroup";
-    }
-    else if([className isEqualToString:@"VKUsersArray"]){
-        resultClassName = @"VKUser";
-    }
-    else if([className isEqualToString:@"ADVKAttachmentArray"]){
-        resultClassName = @"ADVKAttachment";
-    }
-    else if([className isEqualToString:@"VKMessageRespondArray"]){
-        resultClassName = @"VKMessageRespond";
-    }
-    else if([className isEqualToString:@"VKMessageArray"]){
-        resultClassName = @"VKMessage";
-    }
-    else if([className isEqualToString:@"VKPostArray"]){
-        resultClassName = @"VKPost";
-    }
-    else if([className isEqualToString:@"VKPollAnswersArray"]){
-        resultClassName = @"VKPollAnswer";
-    }
-    else if([className isEqualToString:@"VKUserCommentArray"]){
-        resultClassName = @"VKUserComment";
-    }
-    else if([className isEqualToString:@"VKAudios"]){
-        resultClassName = @"VKAudio";
-    }
-    else if([className isEqualToString:@"VKPhotoSizes"]){
-        resultClassName = @"VKPhotoSize";
-    }
-    else if([className isEqualToString:@"VKNewsBaseArray"]){
-        resultClassName = @"VKNewsBase";
-    }
-    else if([className isEqualToString:@"VKUserTypeListArray"]){
-        resultClassName = @"VKUserTypeList";
-    }
-    else{
+    if ([arrayClass isSubclassOfClass:[VKApiObjectArray class]]){
+        resultClassName = NSStringFromClass([arrayClass objectClass]);
+    } else {
         NSLog(@"☎️☎️☎️Don't know how to parse array %@", className);
     }
     

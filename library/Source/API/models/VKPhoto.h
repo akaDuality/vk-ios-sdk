@@ -55,8 +55,7 @@
     @property (nonatomic, strong) NSNumber *date;
     @property (nonatomic, strong) VKPhotoSizes *sizes;
 
-    #warning was 'readonly', why?
-    @property (nonatomic, strong) NSString *attachmentString;
+    @property (nonatomic, strong, readonly) NSString *attachmentString;
 
 
     @property VKLikes *likes;

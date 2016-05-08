@@ -29,7 +29,7 @@
 
 @implementation VKApiObjectArray
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
-    return [self initWithDictionary:dict objectClass:self.objectClass];
+    return [self initWithDictionary:dict objectClass:[self.class objectClass]];
 }
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict objectClass:(Class)objectClass {
@@ -54,7 +54,7 @@
 }
 
 - (instancetype)initWithArray:(NSArray *)array {
-    return [self initWithArray:array objectClass:self.objectClass];
+    return [self initWithArray:array objectClass:[self.class objectClass]];
 }
 
 - (NSMutableArray *)parseItems:(NSArray *)toParse asClass:(Class)objectClass {
@@ -129,7 +129,7 @@
     dict[name] = result;
 }
 
-- (Class)objectClass {
++ (Class)objectClass {
     return [VKApiObject class];
 }
 

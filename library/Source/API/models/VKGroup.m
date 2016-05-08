@@ -36,7 +36,7 @@
 @end
 
 @implementation VKGroups
-- (instancetype)initWithDictionary:(NSDictionary *)dict {
-    return [super initWithDictionary:dict objectClass:[VKGroup class]];
++ (Class)objectClass{
+    return [VKGroup class];
 }
 @end

@@ -95,7 +95,14 @@ User type of VK API. See descriptions here https://vk.com/dev/fields
 @property(nonatomic, strong) VKPersonal *personal;
 @property(nonatomic, strong) NSNumber *sex;
 @property(nonatomic, strong) NSNumber *invited_by;
+
+/// Is online
 @property(nonatomic, strong) NSNumber *online;
+/// Online from phone
+@property(nonatomic, strong) NSNumber *online_mobile;
+/// Online from app id
+@property(nonatomic, strong) NSNumber *online_app;
+
 @property(nonatomic, strong) NSString *bdate;
 @property(nonatomic, strong) VKCity *city;
 @property(nonatomic, strong) VKCountry *country;
@@ -119,7 +126,6 @@ User type of VK API. See descriptions here https://vk.com/dev/fields
 @property(nonatomic, strong) NSNumber *wall_comments;
 @property(nonatomic, assign) BOOL can_write_private_message;
 @property(nonatomic, strong) NSString *phone;
-@property(nonatomic, strong) NSNumber *online_mobile;
 @property(nonatomic, strong) NSNumber *faculty;
 @property(nonatomic, strong) NSNumber *university;
 @property(nonatomic, strong) VKUniversities *universities;
@@ -137,6 +143,7 @@ User type of VK API. See descriptions here https://vk.com/dev/fields
 @property(nonatomic, strong) NSString *music;
 @property(nonatomic, strong) NSString *quoutes;
 @property(nonatomic, strong) NSString *activities;
+
 @property(nonatomic, strong) NSString *photo_max;
 @property(nonatomic, strong) NSString *photo_50;
 @property(nonatomic, strong) NSString *photo_100;
@@ -144,6 +151,7 @@ User type of VK API. See descriptions here https://vk.com/dev/fields
 @property(nonatomic, strong) NSString *photo_200_orig;
 @property(nonatomic, strong) NSString *photo_400_orig;
 @property(nonatomic, strong) NSString *photo_max_orig;
+
 @property(nonatomic, strong) VKPhotoArray *photos;
 @property(nonatomic, strong) NSNumber *photos_count;
 @property(nonatomic, strong) VKRelativities *relatives;
@@ -174,6 +182,7 @@ User type of VK API. See descriptions here https://vk.com/dev/fields
 
 // getSubscriptions
 @property(nonatomic, strong) NSNumber *followers_count;
+
 @end
 
 /**

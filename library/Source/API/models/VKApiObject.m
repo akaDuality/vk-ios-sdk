@@ -28,7 +28,7 @@
 
 
 #ifdef DEBUG
-#define PRINT_PARSE_DEBUG_INFO YES
+#define PRINT_PARSE_DEBUG_INFO NO
 #else
 #define PRINT_PARSE_DEBUG_INFO NO
 #endif
@@ -201,7 +201,7 @@ static NSString *getPropertyName(objc_property_t prop) {
             // Проверим среди сменившихся имён
             // Если не нашли — сообщаем
             if (!propHelper) {
-                NSLog(@"😡 Missed key %@ in class %@", key, className);
+//                NSLog(@"😡 Missed key %@ in class %@", key, className);
                 continue;
             }
         };
@@ -260,7 +260,7 @@ static NSString *getPropertyName(objc_property_t prop) {
                     resultObject = nil;
                 }
                 if (PRINT_PARSE_DEBUG_INFO) {
-                    [warnings addObject:[NSString stringWithFormat:@"property with name %@ expected class %@, result class %@", propertyName, propertyClass, [resultObject class]]];
+                    [warnings addObject:[NSString stringWithFormat:@"property with name %@ expected class '%@', result class '%@'", propertyName, propertyClass, [resultObject class]]];
                 }
             } else if (propHelper.isPrimitive) {
                 resultObject = [resultObject isKindOfClass:[NSNumber class]] ? resultObject : nil;
@@ -350,7 +350,7 @@ static NSString *getPropertyName(objc_property_t prop) {
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
     if (PRINT_PARSE_DEBUG_INFO) {
-        NSLog(@"Parser tried to set value (%@) for undefined key (%@)", value, key);
+        NSLog(@"Parser tried to set value '%@' for undefined key '%@' in class '%@'", value, key, NSStringFromClass(self.class));
     }
 }
 

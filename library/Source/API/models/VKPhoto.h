@@ -42,6 +42,7 @@
 @interface VKPhoto : VKApiObject
     @property (nonatomic, strong) NSNumber *id;
     @property (nonatomic, strong) NSNumber *album_id;
+    @property (nonatomic, strong) NSNumber *user_id;
     @property (nonatomic, strong) NSNumber *owner_id;
     @property (nonatomic, strong) NSString *photo_75;
     @property (nonatomic, strong) NSString *photo_130;

@@ -280,9 +280,9 @@ static NSString *getPropertyName(objc_property_t prop) {
     NSString *resultClassName = className;
     
     if ([arrayClass isSubclassOfClass:[VKApiObjectArray class]]){
-        resultClassName = NSStringFromClass([arrayClass objectClass]);
+        resultClassName = NSStringFromClass([(VKApiObjectArray *)arrayClass objectClass]);
     } else {
-        NSLog(@"☎️☎️☎️Don't know how to parse array %@", className);
+        NSLog(@"❌ Don't know how to parse array %@", className);
     }
     
     result = NSClassFromString(resultClassName);

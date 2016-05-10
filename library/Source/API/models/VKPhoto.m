@@ -21,24 +21,40 @@
 //  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "VKPhoto.h"
+#import "VKSdk.h"
 
 @implementation VKCount
 
-
-
 @end
 
-
-
 @implementation VKPhoto
--(NSString *)attachmentString {
+
+- (NSString *)attachmentString{
     return [NSString stringWithFormat:@"photo%@_%@",_owner_id, _id];
 }
+
+- (NSNumber *)can_comment{
+    NSNumber * canComment = _can_comment;
+    
+    NSInteger currentUserID = [[VKSdk accessToken].userId integerValue];
+    NSInteger photoOwnerID = [_owner_id integerValue];
+    
+    if(currentUserID == photoOwnerID)
+        canComment = @(YES);
+    
+    return canComment;
+}
+
 @end
 
 @implementation VKPhotoArray
--(instancetype)initWithDictionary:(NSDictionary *)dict
-{
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict{
     return [super initWithDictionary:dict objectClass:[VKPhoto class]];
 }
+
++ (Class)objectClass{
+    return [VKPhoto class];
+}
+
 @end

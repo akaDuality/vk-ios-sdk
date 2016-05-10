@@ -67,6 +67,8 @@
 		8F99D63A1C42C61A0006DB03 /* VKDocs.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F99D6381C42C61A0006DB03 /* VKDocs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8F99D63B1C42C61A0006DB03 /* VKDocs.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F99D6391C42C61A0006DB03 /* VKDocs.m */; };
 		8F99D63C1C42C61A0006DB03 /* VKDocs.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F99D6391C42C61A0006DB03 /* VKDocs.m */; };
+		9C1876A41CD8C7A900CDF4E2 /* VKAttachableProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C1876A31CD8C7A900CDF4E2 /* VKAttachableProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C1876A51CD8C7CE00CDF4E2 /* VKAttachableProtocol.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 9C1876A31CD8C7A900CDF4E2 /* VKAttachableProtocol.h */; };
 		9C839F8D1CAD30E100C8B59A /* VKVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA8F65E1CAD2ED800066ECD /* VKVideo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C839F8E1CAD311C00C8B59A /* VKVideo.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 9CA8F65E1CAD2ED800066ECD /* VKVideo.h */; };
 		9CA8F6601CAD2ED800066ECD /* VKVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA8F65F1CAD2ED800066ECD /* VKVideo.m */; };
@@ -320,6 +322,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				9C1876A51CD8C7CE00CDF4E2 /* VKAttachableProtocol.h in Copy Files */,
 				F3050D221C4912420092FE76 /* VKApiDocs.h in Copy Files */,
 				F3050D211C49123C0092FE76 /* VKDocs.h in Copy Files */,
 				F3769D441BDFDD3C00AEC4AF /* VKAuthorizationResult.h in Copy Files */,
@@ -471,6 +474,7 @@
 		8F99D6341C42C6010006DB03 /* VKApiDocs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VKApiDocs.m; path = library/Source/API/methods/VKApiDocs.m; sourceTree = SOURCE_ROOT; };
 		8F99D6381C42C61A0006DB03 /* VKDocs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKDocs.h; sourceTree = "<group>"; };
 		8F99D6391C42C61A0006DB03 /* VKDocs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VKDocs.m; sourceTree = "<group>"; };
+		9C1876A31CD8C7A900CDF4E2 /* VKAttachableProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKAttachableProtocol.h; sourceTree = "<group>"; };
 		9CA8F65E1CAD2ED800066ECD /* VKVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKVideo.h; sourceTree = "<group>"; };
 		9CA8F65F1CAD2ED800066ECD /* VKVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VKVideo.m; sourceTree = "<group>"; };
 		F3007C5C1AEE50B5007CCA9D /* VKApiConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VKApiConst.m; sourceTree = "<group>"; };
@@ -621,6 +625,7 @@
 		1ACA64B4219AB5F2A104F4E3 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				9C1876A31CD8C7A900CDF4E2 /* VKAttachableProtocol.h */,
 				8F99D6381C42C61A0006DB03 /* VKDocs.h */,
 				8F99D6391C42C61A0006DB03 /* VKDocs.m */,
 				1ACA6BF00807A26E3B00BD65 /* VKUser.h */,
@@ -879,6 +884,7 @@
 				F34671361B8B7D07003EF74B /* VKCaptchaViewController.h in Headers */,
 				F34670E61B8B7CE4003EF74B /* VKApiConst.h in Headers */,
 				F34670F61B8B7D07003EF74B /* VKBatchRequest.h in Headers */,
+				9C1876A41CD8C7A900CDF4E2 /* VKAttachableProtocol.h in Headers */,
 				F346713D1B8B7D07003EF74B /* VKUploadImage.h in Headers */,
 				F346712D1B8B7D07003EF74B /* VKUploadPhotoRequest.h in Headers */,
 				F34671391B8B7D07003EF74B /* VKUtil.h in Headers */,

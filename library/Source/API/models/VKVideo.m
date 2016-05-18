@@ -18,8 +18,8 @@
 
 @implementation VKVideoArray
 
--(instancetype)initWithDictionary:(NSDictionary *)dict{
-    return [super initWithDictionary:dict objectClass:[VKVideo class]];
++ (Class)objectClass{
+    return [VKVideo class];
 }
 
 @end

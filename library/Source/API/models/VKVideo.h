@@ -25,6 +25,7 @@
 @property (nonatomic) NSString  *photo_130;
 @property (nonatomic) NSString  *photo_320;
 @property (nonatomic) NSString  *photo_640;
+@property (nonatomic) NSString  *photo_800;
 
 @property (nonatomic) NSString *link;
 

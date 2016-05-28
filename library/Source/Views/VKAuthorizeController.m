@@ -277,7 +277,7 @@ NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     if (_validationError) {
         NSError *error = [NSError errorWithVkError:[VKError errorWithCode:VK_AUTHORIZE_CONTROLLER_CANCEL]];
         if (_validationError.request.errorBlock) {
-            _validationError.request.errorBlock(error);
+            _validationError.request.errorBlock(_validationError.request, error);
         }
     }
 }

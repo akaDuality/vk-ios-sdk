@@ -81,7 +81,7 @@ extern inline BOOL VKStateTransitionIsValid(VKOperationState fromState, VKOperat
 - (void)start {
     void (^originalErrorBlock)(NSError *) = [_uploadRequest.errorBlock copy];
     __weak VKUploadImageOperation *weakSelf = self;
-    _uploadRequest.errorBlock = ^(NSError *error) {
+    _uploadRequest.errorBlock = ^(VKRequest *request, NSError *error) {
         [weakSelf finish];
         if (originalErrorBlock)
             originalErrorBlock(error);

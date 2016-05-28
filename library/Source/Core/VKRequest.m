@@ -209,7 +209,7 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
 #pragma mark Execution
 
 - (void)executeWithResultBlock:(void (^)(VKResponse *))completeBlock
-                    errorBlock:(void (^)(NSError *))errorBlock {
+                    errorBlock:(void (^)(VKRequest *request, NSError *))errorBlock {
     self.completeBlock = completeBlock;
     self.errorBlock = errorBlock;
 
@@ -222,7 +222,7 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
 
 - (void)executeAfter:(VKRequest *)request
      withResultBlock:(void (^)(VKResponse *response))completeBlock
-          errorBlock:(void (^)(NSError *error))errorBlock {
+          errorBlock:(void (^)(VKRequest *request, NSError *error))errorBlock {
     self.completeBlock = completeBlock;
     self.errorBlock = errorBlock;
     [request addPostRequest:self];
@@ -421,11 +421,11 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     if (self.error) {
         block = ^{
             if (self.errorBlock) {
-                self.errorBlock(self.error);
+                self.errorBlock(self, self.error);
             }
             for (VKRequest *postRequest in _postRequestsQueue) {
                 if (postRequest.errorBlock) {
-                    postRequest.errorBlock(self.error);
+                    postRequest.errorBlock(self, self.error);
                 }
             }
         };

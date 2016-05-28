@@ -481,7 +481,7 @@ static NSString *VK_ACCESS_TOKEN_DEFAULTS_KEY = @"VK_ACCESS_TOKEN_DEFAULTS_KEY_D
         if (infoCallback) {
             infoCallback(user, [VK_ENSURE_NUM(response.json[@"permissions"]) integerValue], nil);
         }
-    }                errorBlock:^(NSError *error) {
+    }                errorBlock:^(VKRequest *request, NSError *error) {
         if (infoCallback) {
             infoCallback(nil, 0, error);
         }

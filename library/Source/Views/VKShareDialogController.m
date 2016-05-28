@@ -1004,7 +1004,7 @@ static const CGFloat kAttachmentsViewSize = 100.0f;
         if (self.parent.dismissAutomatically) {
             [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         }
-    }                 errorBlock:^(NSError *error) {
+    }                 errorBlock:^(VKRequest *request, NSError *error) {
         self.navigationItem.rightBarButtonItem = nil;
         self.navigationItem.rightBarButtonItems = [self rightBarButtonItems];
         textView.editable = YES;
@@ -1084,7 +1084,7 @@ static const CGFloat kAttachmentsViewSize = 100.0f;
             [self.attachmentsScrollView reloadData];
             [shareDialogView setNeedsLayout];
         }];
-        [uploadRequest setErrorBlock:^(NSError *error) {
+        [uploadRequest setErrorBlock:^(VKRequest *request, NSError *error) {
             NSLog(@"Error: %@", error.vkError);
             [self removeAttachIfExists:attach];
             attach.uploadingRequest = nil;
@@ -1158,7 +1158,7 @@ static const CGFloat kAttachmentsViewSize = 100.0f;
                 }
             }                                    completion:nil];
             [self.attachmentsScrollView reloadData];
-        } errorBlock:^(NSError *error) {
+        } errorBlock:^(VKRequest *request, NSError *error) {
             NSLog(@"%@", error);
         }];
     }

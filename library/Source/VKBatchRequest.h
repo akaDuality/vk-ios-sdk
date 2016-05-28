@@ -36,7 +36,7 @@ Used for execution bunch of methods at time, and receive results of that methods
 /// Specify completion block for request
 @property(nonatomic, copy) void (^completeBlock)(NSArray *responses);
 /// Specity error (HTTP or API) block for request.
-@property(nonatomic, copy) void (^errorBlock)(NSError *error);
+@property(nonatomic, copy) void (^errorBlock)(VKBatchRequest *request, NSError *error);
 
 /**
 Initializes batch processing with requests
@@ -57,7 +57,7 @@ Executes batch request
 @param completeBlock will receive result of passed requests
 @param errorBlock called if any request did fail
 */
-- (void)executeWithResultBlock:(void (^)(NSArray *responses))completeBlock errorBlock:(void (^)(NSError *error))errorBlock;
+- (void)executeWithResultBlock:(void (^)(NSArray *responses))completeBlock errorBlock:(void (^)(VKBatchRequest *request, NSError *error))errorBlock;
 
 /**
 Cancel current batch operation

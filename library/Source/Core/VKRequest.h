@@ -91,7 +91,7 @@ Creates and debug timings for VKRequest
 /// Specify completion block for request
 @property(nonatomic, copy) void (^completeBlock)(VKResponse *response);
 /// Specity error (HTTP or API) block for request.
-@property(nonatomic, copy) void (^errorBlock)(NSError *error);
+@property(nonatomic, copy) void (^errorBlock)(VKRequest *request, NSError *error);
 /// Specify attempts for request loading if caused HTTP-error. 0 for infinite
 @property(nonatomic, assign) int attempts;
 /// Use HTTPS requests (by default is YES). If http-request is impossible (user denied no https access), SDK will load https version
@@ -219,7 +219,7 @@ Executes that request, and returns result to blocks
 @param errorBlock called immediately if there was API error, or after <b>attempts</b> tries if there was an HTTP error
 */
 - (void)executeWithResultBlock:(void (^)(VKResponse *response))completeBlock
-                    errorBlock:(void (^)(NSError *error))errorBlock;
+                    errorBlock:(void (^)(VKRequest *request, NSError *error))errorBlock;
 
 /**
 Register current request for execute after passed request, if passed request is successful. If it's not, errorBlock will be called.
@@ -229,7 +229,7 @@ Register current request for execute after passed request, if passed request is 
 */
 - (void)executeAfter:(VKRequest *)request
      withResultBlock:(void (^)(VKResponse *response))completeBlock
-          errorBlock:(void (^)(NSError *error))errorBlock;
+          errorBlock:(void (^)(VKRequest *request, NSError *error))errorBlock;
 
 /**
 Starts loading of prepared request. You can use it instead of executeWithResultBlock

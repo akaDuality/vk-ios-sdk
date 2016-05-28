@@ -45,7 +45,7 @@
     return self;
 }
 
-- (void)executeWithResultBlock:(void (^)(NSArray *responses))completeBlock errorBlock:(void (^)(NSError *))errorBlock {
+- (void)executeWithResultBlock:(void (^)(NSArray *responses))completeBlock errorBlock:(void (^)(VKBatchRequest *request, NSError *))errorBlock {
     self.completeBlock = completeBlock;
     self.errorBlock = errorBlock;
     _responses = [NSMutableArray arrayWithCapacity:_requests.count];
@@ -62,7 +62,7 @@
         };
 
         void (^originalErrorBlock)(NSError *) = [request.errorBlock copy];
-        request.errorBlock = ^(NSError *error) {
+        request.errorBlock = ^(VKRequest *request, NSError *error) {
             [self provideError:error];
             if (originalErrorBlock) originalErrorBlock(error);
         };
@@ -94,7 +94,7 @@
 
 - (void)provideError:(NSError *)error {
     if (self.errorBlock)
-        self.errorBlock(error);
+        self.errorBlock(self, error);
 }
 
 @end

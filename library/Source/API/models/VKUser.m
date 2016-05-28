@@ -26,6 +26,11 @@
 @end
 
 @implementation VKUser
+
+- (NSString *)fullName{
+    return [NSString stringWithFormat:@"%@ %@", _first_name, _last_name];
+}
+
 @end
 
 @implementation VKGeoObject

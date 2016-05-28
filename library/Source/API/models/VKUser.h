@@ -88,6 +88,7 @@
 @property(nonatomic, strong) NSString *last_name_dat;
 @property(nonatomic, strong) NSString *first_name_ins;
 @property(nonatomic, strong) NSString *last_name_ins;
+@property(nonatomic, strong) NSString *fullName;
 @property(nonatomic, strong) VKPersonal *personal;
 @property(nonatomic, strong) NSNumber *sex;
 @property(nonatomic, strong) NSNumber *invited_by;

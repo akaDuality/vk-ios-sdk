@@ -29,10 +29,12 @@ Used for execution bunch of methods at time, and receive results of that methods
 @interface VKBatchRequest : VKObject {
 @private
 
-    NSMutableArray *_requests;
     NSMutableArray *_responses;
     BOOL _canceled;
 }
+
+/// Get requests used to init VKBatchRequest
+@property(nonatomic, strong, readonly) NSMutableArray * requests;
 /// Specify completion block for request
 @property(nonatomic, copy) void (^completeBlock)(NSArray *responses);
 /// Specity error (HTTP or API) block for request.
@@ -63,4 +65,5 @@ Executes batch request
 Cancel current batch operation
 */
 - (void)cancel;
+
 @end

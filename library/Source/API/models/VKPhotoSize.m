@@ -30,6 +30,11 @@
 }
 
 - (VKPhotoSize *)photoSizeWithType:(NSString *)type {
-    return sizesDictionary[type];
+    for(VKPhotoSize * size in self.items){
+        if([size.type isEqualToString:type])
+            return size;
+    }
+    return nil;
 }
+
 @end

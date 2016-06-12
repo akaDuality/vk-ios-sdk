@@ -362,6 +362,11 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
             }
         }
     }
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    });
 }
 
 - (void)operationDidStart:(NSNotification *)notification {
@@ -441,6 +446,10 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     } else {
         dispatch_async(self.responseQueue, block);
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    });
 }
 
 - (void)repeat {

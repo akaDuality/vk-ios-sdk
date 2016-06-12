@@ -31,6 +31,8 @@
 
 #define SUPPORTED_LANGS_ARRAY @[@"ru", @"en", @"uk", @"es", @"fi", @"de", @"it"]
 
+static int VK_ACTIVE_REQUEST_COUNT = 0;
+
 void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     if (!block) {
         return;
@@ -365,6 +367,7 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        VK_ACTIVE_REQUEST_COUNT++;
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     });
 }
@@ -448,7 +451,11 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        VK_ACTIVE_REQUEST_COUNT--;
+        if (VK_ACTIVE_REQUEST_COUNT <= 0) {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        }
+        
     });
 }
 

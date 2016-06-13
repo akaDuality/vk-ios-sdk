@@ -26,6 +26,9 @@
 #import "VKObject.h"
 
 
+static int VK_ACTIVE_REQUEST_COUNT = 0;
+
+
 /**
 Creates and debug timings for VKRequest
 */
@@ -266,5 +269,10 @@ Cancel current request. Result will be not passed. errorBlock will be called wit
  Specify language for API request
  */
 - (void)setPreferredLang:(NSString *)lang;
+
+
+#pragma mark - Network Indicator
++ (void)incremetNumberOfActiveLoadingByMethod:(NSString *)methodName;
++ (void)decrementNumberOfActiveLoadingByMethod:(NSString *)methodName;
 
 @end

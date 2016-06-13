@@ -42,10 +42,14 @@ extern inline BOOL VKStateTransitionIsValid(VKOperationState fromState, VKOperat
 }
 
 - (NSOperation *)createExecutionOperation {
-    VKOperation *op = [VKUploadImageOperation operationWithUploadRequest:self];
-    [op setResponseQueue:self.responseQueue];
-    self.executionOperation = op;
-    return op;
+    VKOperation *uploadOperation = [VKUploadImageOperation operationWithUploadRequest:self];{
+        [uploadOperation setResponseQueue:self.responseQueue];
+        [uploadOperation setCompletionBlock:^{
+            [VKRequest decrementNumberOfActiveLoadingByMethod:@"photo uploading"];
+        }];
+    } self.executionOperation = uploadOperation;
+    
+    return uploadOperation;
 }
 
 - (VKRequest *)getServerRequest {
@@ -61,6 +65,8 @@ extern inline BOOL VKStateTransitionIsValid(VKOperationState fromState, VKOperat
 }
 
 @end
+
+
 
 @interface VKUploadImageOperation ()
 @property(nonatomic, strong) VKUploadPhotoBase *uploadRequest;

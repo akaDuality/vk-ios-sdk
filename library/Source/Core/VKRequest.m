@@ -31,7 +31,7 @@
 
 #define SUPPORTED_LANGS_ARRAY @[@"ru", @"en", @"uk", @"es", @"fi", @"de", @"it"]
 
-static int VK_ACTIVE_REQUEST_COUNT = 0;
+
 
 void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     if (!block) {
@@ -365,11 +365,7 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
         }
     }
     
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        VK_ACTIVE_REQUEST_COUNT++;
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    });
+    [VKRequest incremetNumberOfActiveLoadingByMethod:self.methodName];
 }
 
 - (void)operationDidStart:(NSNotification *)notification {
@@ -450,13 +446,7 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
         dispatch_async(self.responseQueue, block);
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        VK_ACTIVE_REQUEST_COUNT--;
-        if (VK_ACTIVE_REQUEST_COUNT <= 0) {
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        }
-        
-    });
+    [VKRequest decrementNumberOfActiveLoadingByMethod:self.methodName];
 }
 
 - (void)repeat {
@@ -595,4 +585,24 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
 }
 
 
+
+#pragma mark - Network Indicator
+
++ (void)incremetNumberOfActiveLoadingByMethod:(NSString *)methodName{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        VK_ACTIVE_REQUEST_COUNT++;
+//        NSLog(@"Request count is incremented to %ld by %@", (long) VK_ACTIVE_REQUEST_COUNT, methodName);
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    });
+}
+
++ (void)decrementNumberOfActiveLoadingByMethod:(NSString *)methodName{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        VK_ACTIVE_REQUEST_COUNT--;
+//        NSLog(@"Request count is reduced to %ld by %@", (long) VK_ACTIVE_REQUEST_COUNT, methodName);
+        if (VK_ACTIVE_REQUEST_COUNT <= 0) {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        }
+    });
+}
 @end

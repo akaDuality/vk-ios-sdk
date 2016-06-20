@@ -91,6 +91,13 @@
     return self.items.reverseObjectEnumerator;
 }
 
+- (void)setItems:(NSMutableArray *)items{
+    if ([items isKindOfClass:[NSMutableArray class]]) {
+        _items = items;
+    } else {
+        _items = items.mutableCopy;
+    }
+}
 - (void)addObject:(id)object {
     [self.items addObject:object];
     self.count = self.items.count;

@@ -30,7 +30,13 @@
 @implementation VKPhoto
 
 - (NSString *)attachmentString{
-    return [NSString stringWithFormat:@"photo%@_%@",_owner_id, _id];
+    if (self.access_key){
+        return [NSString stringWithFormat:@"photo%@_%@_%@",_owner_id, _id, _access_key];
+    } else {
+        return [NSString stringWithFormat:@"photo%@_%@",_owner_id, _id];
+    }
+        
+    
 }
 
 - (NSNumber *)can_comment{

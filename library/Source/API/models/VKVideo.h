@@ -28,7 +28,7 @@
 @property (nonatomic) NSString  *photo_800;
 
 @property (nonatomic) NSString *link;
-
+@property (strong, nonatomic) NSString *access_key;
 
 
 

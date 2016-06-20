@@ -28,7 +28,7 @@
 
 
 #ifdef DEBUG
-#define PRINT_PARSE_DEBUG_INFO NO
+#define PRINT_PARSE_DEBUG_INFO YES
 #else
 #define PRINT_PARSE_DEBUG_INFO NO
 #endif
@@ -121,7 +121,11 @@ static NSString *getPropertyName(objc_property_t prop) {
         
         if (!_isPrimitive) {
             _propertyClass = NSClassFromString(_propertyClassName);
-            if (!(_isModelsArray = [_propertyClass isSubclassOfClass:[VKApiObjectArray class]])) {
+            
+            BOOL isModelsArray = [_propertyClass isSubclassOfClass:[VKApiObjectArray class]];// || [_propertyClass isSubclassOfClass:[NSMutableArray class]];
+            if (isModelsArray) {
+                _isModelsArray = isModelsArray;
+            } else {
                 _isModel = [_propertyClass isSubclassOfClass:[VKApiObject class]];
             }
         }
@@ -201,7 +205,7 @@ static NSString *getPropertyName(objc_property_t prop) {
             // Проверим среди сменившихся имён
             // Если не нашли — сообщаем
             if (!propHelper) {
-//                NSLog(@"😡 Missed key %@ in class %@", key, className);
+                NSLog(@"😡 Missed key %@ in class %@", key, className);
                 continue;
             }
         };
@@ -257,20 +261,29 @@ static NSString *getPropertyName(objc_property_t prop) {
                 if ([(Class) propertyClass isSubclassOfClass:[NSString class]]) {
                     resultObject = [resultObject respondsToSelector:@selector(stringValue)] ? [resultObject stringValue] : nil;
                 } else {
-                    resultObject = nil;
+//                    resultObject = nil;
+//                    if (PRINT_PARSE_DEBUG_INFO) {
+//                        [warnings addObject:[NSString stringWithFormat:@"property with name '%@' expected class '%@', result class '%@'", propertyName, propertyClass, [resultObject class]]];
+//                    }
                 }
-                if (PRINT_PARSE_DEBUG_INFO) {
-                    [warnings addObject:[NSString stringWithFormat:@"property with name %@ expected class '%@', result class '%@'", propertyName, propertyClass, [resultObject class]]];
-                }
+                
             } else if (propHelper.isPrimitive) {
-                resultObject = [resultObject isKindOfClass:[NSNumber class]] ? resultObject : nil;
+                if ([resultObject isKindOfClass:[NSNumber class]]) {
+                    resultObject = resultObject;
+                } else {
+//                    resultObject = nil;
+                }
             }
+        }
+        
+        if (!resultObject &&  PRINT_PARSE_DEBUG_INFO) {
+            [warnings addObject:[NSString stringWithFormat:@"Unknown property with name '%@' expected class '%@', result class '%@'", propertyName, propertyClass, [resultObject class]]];
         }
         [self setValue:resultObject forKey:propertyName];
     }
     
     if (PRINT_PARSE_DEBUG_INFO && warnings.count) {
-        NSLog(@"Parsing %@ complete. Warnings: %@", self, warnings);
+        NSLog(@"Parsing '%@' complete. Warnings: %@", self, warnings);
     }
 }
 
@@ -282,7 +295,7 @@ static NSString *getPropertyName(objc_property_t prop) {
     if ([arrayClass isSubclassOfClass:[VKApiObjectArray class]]){
         resultClassName = NSStringFromClass([(VKApiObjectArray *)arrayClass objectClass]);
     } else {
-        NSLog(@"❌ Don't know how to parse array %@", className);
+        NSLog(@"❌ Don't know how to parse array '%@'", className);
     }
     
     result = NSClassFromString(resultClassName);
@@ -303,6 +316,7 @@ static NSString *getPropertyName(objc_property_t prop) {
             objc_property_t property = properties[i];
             
             //NSLog(@"enumPropertiesWithBlock %@: %s", NSStringFromClass(searchClass), property_getName(property));
+            
             
             VKPropertyHelper *helper = [[VKPropertyHelper alloc] initWith:property];
             if ([ignoredProperties containsObject:helper.propertyName])
@@ -349,6 +363,14 @@ static NSString *getPropertyName(objc_property_t prop) {
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+    if (   [key isEqualToString:@"hash"]
+        || [key isEqualToString:@"superclass"]
+        || [key isEqualToString:@"description"]
+        || [key isEqualToString:@"debugDescription"]
+        || [key isEqualToString:@"attachmentString"]){
+        return;
+    }
+        
     if (PRINT_PARSE_DEBUG_INFO) {
         NSLog(@"Parser tried to set value '%@' for undefined key '%@' in class '%@'", value, key, NSStringFromClass(self.class));
     }

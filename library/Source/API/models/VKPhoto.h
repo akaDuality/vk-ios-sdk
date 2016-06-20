@@ -66,6 +66,8 @@
     @property (nonatomic, strong)           UIImage *       uploadingObject;
     @property (nonatomic, assign)           float           uploadingProgress;
 
+    @property (strong, nonatomic) NSString *access_key;
+
 @end
 
 

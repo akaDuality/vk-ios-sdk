@@ -28,7 +28,22 @@
 @implementation VKUser
 
 - (NSString *)fullName{
-    return [NSString stringWithFormat:@"%@ %@", _first_name, _last_name];
+    NSString * fullName;
+    
+#warning make something with this, because performance gonna suck at tables and collections
+    if([NSPersonNameComponents class]){ // checking availability. otherwise, pre-iOS 9 will crash
+        NSPersonNameComponents * components = [NSPersonNameComponents new];
+        components.givenName = _first_name;
+        components.familyName = _last_name;
+        
+        NSPersonNameComponentsFormatter * formatter = [NSPersonNameComponentsFormatter new];
+        formatter.style = NSPersonNameComponentsFormatterStyleMedium;
+        fullName = [formatter stringFromPersonNameComponents:components];
+    } else{
+        fullName = [NSString stringWithFormat:@"%@ %@", _first_name, _last_name];
+    }
+    
+    return fullName;
 }
 
 @end

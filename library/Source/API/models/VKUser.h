@@ -30,6 +30,38 @@
 #import "VKUniversity.h"
 #import "VKRelative.h"
 
+typedef NS_ENUM(NSInteger, NameCase) {
+    /*!
+     *  Именительный. Алексей Берёзка.
+     */
+    NameCaseNominative,
+    
+    /*!
+     *  Родительный. Алексея Берёзки.
+     */
+    NameCaseGenetive,
+    
+    /*!
+     *  Дательный. Алексею Берёзке.
+     */
+    NameCaseDative,
+    
+    /*!
+     *  Винительный. Алексея Берёзку.
+     */
+    NameCaseAccusative,
+    
+    /*!
+     *  Творительный. Алексеем Берёзкой.
+     */
+    NameCaseInstrumental,
+    
+    /*!
+     *  Предложный. Алексее Берёзке.
+     */
+    NameCasePrepositional
+};
+
 @interface VKGeoObject : VKApiObject
 @property(nonatomic, strong) NSNumber *id;
 @property(nonatomic, strong) NSString *title;
@@ -78,20 +110,103 @@
  */
 @interface VKUser : VKApiObject
 @property(nonatomic, strong) NSNumber *id;
+
+/*!
+ *  Именительный. Алексей.
+ */
 @property(nonatomic, strong) NSString *first_name;
+
+/*!
+ *  Именительный. Берёзка.
+ */
 @property(nonatomic, strong) NSString *last_name;
-@property(nonatomic, strong) NSString *first_name_acc;
-@property(nonatomic, strong) NSString *last_name_acc;
+
+/*!
+ *  Родительный. Алексея.
+ */
 @property(nonatomic, strong) NSString *first_name_gen;
+
+/*!
+ *  Родительный. Берёзки.
+ */
 @property(nonatomic, strong) NSString *last_name_gen;
+
+/*!
+ *  Дательный. Алексею.
+ */
 @property(nonatomic, strong) NSString *first_name_dat;
+
+/*!
+ *  Дательный. Берёзке.
+ */
 @property(nonatomic, strong) NSString *last_name_dat;
+
+/*!
+ *  Винительный. Алексея.
+ */
+@property(nonatomic, strong) NSString *first_name_acc;
+
+/*!
+ *  Винительный. Берёзку.
+ */
+@property(nonatomic, strong) NSString *last_name_acc;
+
+/*!
+ *  Творительный. Алексеем.
+ */
 @property(nonatomic, strong) NSString *first_name_ins;
+
+/*!
+ *  Творительный. Берёзкой.
+ */
 @property(nonatomic, strong) NSString *last_name_ins;
+
+/*!
+ *  Предложный. Алексее.
+ */
+@property(nonatomic, strong) NSString *first_name_abl;
+
+/*!
+ *  Предложный. Берёзке.
+ */
+@property(nonatomic, strong) NSString *last_name_abl;
+
+/*!
+ *  Именительный. Алексей Берёзка.
+ */
 @property(nonatomic, strong) NSString *fullName;
+
+/*!
+ *  Родительный. Алексея Берёзки.
+ */
+@property(nonatomic, strong) NSString *fullNameGen;
+
+/*!
+ *  Дательный. Алексею Берёзке.
+ */
+@property(nonatomic, strong) NSString *fullNameDat;
+
+/*!
+ *  Винительный. Алексея Берёзку.
+ */
+@property(nonatomic, strong) NSString *fullNameAcc;
+
+/*!
+ *  Творительный. Алексеем Берёзкой.
+ */
+@property(nonatomic, strong) NSString *fullNameIns;
+
+/*!
+ *  Предложный. Алексее Берёзке.
+ *  Почему VK его обозвали Ablative — не знаю. Ablative — совершенно другая штука. Но я сохранил abl для единообразия с first_name_abl и last_name_abl.
+ */
+@property(nonatomic, strong) NSString *fullNameAbl;
+
+
 @property(nonatomic, strong) VKPersonal *personal;
 @property(nonatomic, strong) NSNumber *sex;
 @property(nonatomic, strong) NSNumber *invited_by;
+
 
 /// Is online
 @property(nonatomic, strong) NSNumber *online;
@@ -170,7 +285,7 @@
 @end
 
 /**
-Array of API users
-*/
+ Array of API users
+ */
 @interface VKUsersArray : VKApiObjectArray
 @end

@@ -25,23 +25,115 @@
 @implementation VKLastSeen
 @end
 
+@interface VKUser ()
+
+@end
+
 @implementation VKUser
 
+static NSPersonNameComponentsFormatter * formatter;
+
 - (NSString *)fullName{
+    if(!_fullName)
+        _fullName = [self fullName:NameCaseNominative];
+    
+    return _fullName;
+}
+
+- (NSString *)fullNameGen{
+    if(!_fullNameGen)
+        _fullNameGen = [self fullName:NameCaseGenetive];
+    
+    return _fullNameGen;
+}
+
+- (NSString *)fullNameDat{
+    if(!_fullNameDat)
+        _fullNameDat = [self fullName:NameCaseDative];
+    
+    return _fullNameDat;
+}
+
+- (NSString *)fullNameAcc{
+    if(!_fullNameAcc)
+        _fullNameAcc = [self fullName:NameCaseAccusative];
+    
+    return _fullNameAcc;
+}
+
+- (NSString *)fullNameIns{
+    if(!_fullNameIns)
+        _fullNameIns = [self fullName:NameCaseInstrumental];
+    
+    return _fullNameIns;
+}
+
+- (NSString *)fullNameAbl{
+    if(!_fullNameAbl)
+        _fullNameAbl = [self fullName:NameCasePrepositional];
+    
+    return _fullNameAbl;
+}
+
+- (NSString *)fullName:(NameCase)nameCase{
     NSString * fullName;
     
-#warning make something with this, because performance gonna suck at tables and collections
+    NSString * firstName;
+    NSString * lastName;
+    
+    switch (nameCase) {
+        case NameCaseNominative:
+            firstName = _first_name;
+            lastName = _last_name;
+            break;
+        case NameCaseGenetive:
+            firstName = _first_name_gen;
+            lastName = _last_name_gen;
+            break;
+        case NameCaseDative:
+            firstName = _first_name_dat;
+            lastName = _last_name_dat;
+            break;
+        case NameCaseAccusative:
+            firstName = _first_name_acc;
+            lastName = _last_name_acc;
+            break;
+        case NameCaseInstrumental:
+            firstName = _first_name_ins;
+            lastName = _last_name_ins;
+            break;
+        case NameCasePrepositional:
+            firstName = _first_name_abl;
+            lastName = _last_name_abl;
+            break;
+        default:
+            NSLog(@"Unknown NameCase %ld", (long)nameCase);
+            firstName = _first_name;
+            lastName = _last_name;
+            break;
+    }
+    
+    if(!firstName)
+        firstName = _first_name;
+    
+    if(!lastName)
+        lastName = _last_name;
+    
     if([NSPersonNameComponents class]){ // checking availability. otherwise, pre-iOS 9 will crash
         NSPersonNameComponents * components = [NSPersonNameComponents new];
-        components.givenName = _first_name;
-        components.familyName = _last_name;
         
-        NSPersonNameComponentsFormatter * formatter = [NSPersonNameComponentsFormatter new];
-        formatter.style = NSPersonNameComponentsFormatterStyleMedium;
+        components.givenName = firstName;
+        components.familyName = lastName;
+        
+        if(!formatter){
+            NSPersonNameComponentsFormatter * formatter = [NSPersonNameComponentsFormatter new];
+            formatter.style = NSPersonNameComponentsFormatterStyleMedium;
+        }
+        
         fullName = [formatter stringFromPersonNameComponents:components];
-    } else{
-        fullName = [NSString stringWithFormat:@"%@ %@", _first_name, _last_name];
-    }
+    } else
+        fullName = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+    
     
     return fullName;
 }

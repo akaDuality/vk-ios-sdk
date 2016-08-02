@@ -126,7 +126,7 @@ static NSPersonNameComponentsFormatter * formatter;
         components.familyName = lastName;
         
         if(!formatter){
-            NSPersonNameComponentsFormatter * formatter = [NSPersonNameComponentsFormatter new];
+            formatter = [NSPersonNameComponentsFormatter new];
             formatter.style = NSPersonNameComponentsFormatterStyleMedium;
         }
         

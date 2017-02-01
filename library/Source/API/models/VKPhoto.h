@@ -60,11 +60,11 @@
     @property (nonatomic, strong)           NSNumber *      can_comment;
     @property (nonatomic, strong)           NSNumber *      can_repost;
 
-#warning Create Tags property
     @property (nonatomic, strong)           VKCount *       tags;
 
     @property (nonatomic, strong)           UIImage *       uploadingObject;
     @property (nonatomic, assign)           float           uploadingProgress;
+    @property (nonatomic, assign)           NSString *      uploadingPhotoURL;
 
     @property (strong, nonatomic) NSString *access_key;
 

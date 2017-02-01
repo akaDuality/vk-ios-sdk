@@ -43,10 +43,6 @@
 @property (nonatomic) NSNumber *can_comment;
 /// может ли текущий пользователь скопировать ролик с помощью функции «Рассказать друзьям» (1 — может, 0 — не может);
 @property (nonatomic) NSNumber *can_repost;
-/// информация об отметках «Мне нравится»:
-@property (nonatomic) NSNumber *likesCount DEPRECATED_MSG_ATTRIBUTE("Use likes");
-/// есть ли отметка «Мне нравится» от текущего пользователя;
-@property (nonatomic) NSNumber *user_likes DEPRECATED_MSG_ATTRIBUTE("Use likes");
 /// число отметок «Мне нравится»;
 @property (nonatomic) NSNumber *count;
 /// зацикливание воспроизведения видеозаписи (1 — зацикливается, 0 — не зацикливается).

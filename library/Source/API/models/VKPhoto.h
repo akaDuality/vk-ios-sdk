@@ -68,6 +68,9 @@
 
     @property (strong, nonatomic) NSString *access_key;
 
+// Old keys
+    @property (nonatomic, strong) NSNumber *user_id;
+    @property (nonatomic, strong) NSNumber *post_id;
 @end
 
 

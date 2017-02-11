@@ -39,6 +39,8 @@
 @property(nonatomic, assign) BOOL fromCache;
 @property(nonatomic, assign) BOOL ignoreCache;
 
+// old keys
+@property (nonatomic, strong) NSNumber *date;
 @end
 
 @interface VKAudios : VKApiObjectArray

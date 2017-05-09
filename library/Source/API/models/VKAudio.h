@@ -36,6 +36,8 @@
 @property(nonatomic, strong) NSNumber *album_id;
 @property(nonatomic, strong) NSNumber *genre_id;
 
+@property (nonatomic, strong) NSNumber *content_restricted;
+
 @property(nonatomic, assign) BOOL fromCache;
 @property(nonatomic, assign) BOOL ignoreCache;
 

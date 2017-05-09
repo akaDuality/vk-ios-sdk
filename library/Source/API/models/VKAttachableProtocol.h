@@ -11,5 +11,6 @@
 @protocol VKAttachableProtocol <NSObject>
 
 - (NSString *)attachmentString;
+- (NSString *)fullId;
 
 @end

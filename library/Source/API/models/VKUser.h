@@ -29,6 +29,7 @@
 #import "VKSchool.h"
 #import "VKUniversity.h"
 #import "VKRelative.h"
+#import "VKCareer.h"
 
 typedef NS_ENUM(NSInteger, NameCase) {
     /*!
@@ -281,6 +282,8 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) NSString *wall_default;
 
 @property(nonatomic, strong) NSNumber *followers_count;
+
+@property (nonatomic, strong)   VKCareersArray *  career;
 
 @end
 

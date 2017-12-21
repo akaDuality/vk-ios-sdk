@@ -8,9 +8,9 @@
 
 #import "VKApiObjectArray.h"
 #import "VKLikes.h"
-#import "VKAttachableProtocol.h"
+#import "SharableProtocol.h"
 
-@interface VKVideo : VKApiObject <VKAttachableProtocol>
+@interface VKVideo : VKApiObject <SharableProtocol>
 
 @property (nonatomic) NSNumber *id;
 @property (nonatomic) NSNumber *owner_id;

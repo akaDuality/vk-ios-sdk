@@ -8,9 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol VKAttachableProtocol <NSObject>
+@protocol SharableProtocol <NSObject>
 
 - (NSString *)attachmentString;
 - (NSString *)fullId;
+
+@optional
+/**
+ For albums in InlineActionsView
+ */
+- (BOOL)isSharingDeprecatedForSpecialCases;
 
 @end

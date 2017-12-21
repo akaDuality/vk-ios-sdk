@@ -25,7 +25,7 @@
 #import "VKPhotoSize.h"
 
 #import "VKLikes.h"
-#import "VKAttachableProtocol.h"
+#import "SharableProtocol.h"
 
 @interface VKCount : VKApiObject
 
@@ -38,7 +38,7 @@
  Photo type of VK API. See descriptions here https://vk.com/dev/photo
  */
 
-@interface VKPhoto : VKApiObject <VKAttachableProtocol>
+@interface VKPhoto : VKApiObject <SharableProtocol>
 
     @property (nonatomic, strong)           NSNumber *      id;
     @property (nonatomic, strong)           NSNumber *      album_id;

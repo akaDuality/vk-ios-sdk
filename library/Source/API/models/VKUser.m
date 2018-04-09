@@ -30,7 +30,6 @@
 @end
 
 @implementation VKUser
-
 static NSPersonNameComponentsFormatter * formatter;
 
 - (NSString *)fullName{
@@ -138,6 +137,10 @@ static NSPersonNameComponentsFormatter * formatter;
     return fullName;
 }
 
+-(NSString *)description {
+    return [NSString stringWithFormat:@"<VKUser:%p> (id:%@) %@ %@", self, self.id, self.first_name, self.last_name];
+}
+
 @end
 
 @implementation VKGeoObject
@@ -154,7 +157,11 @@ static NSPersonNameComponentsFormatter * formatter;
 
 @implementation VKUsersArray
 
-+ (Class)objectClass{
++ (Class)objectClass {
+    return [VKUser class];
+}
+
+- (Class)objectClass {
     return [VKUser class];
 }
 

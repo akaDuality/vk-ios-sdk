@@ -204,6 +204,7 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) NSString *fullNameAbl;
 
 
+@property(nonatomic, strong) NSString *domain;
 @property(nonatomic, strong) VKPersonal *personal;
 @property(nonatomic, strong) NSNumber *sex;
 @property(nonatomic, strong) NSNumber *invited_by;
@@ -238,6 +239,7 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) VKExports *exports;
 @property(nonatomic, strong) NSNumber *wall_comments;
 @property(nonatomic, assign) BOOL can_write_private_message;
+@property(nonatomic, assign) BOOL can_see_audio;
 @property(nonatomic, strong) NSString *phone;
 @property(nonatomic, strong) NSNumber *faculty;
 @property(nonatomic, strong) NSNumber *university;
@@ -245,6 +247,7 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) VKSchools *schools;
 @property(nonatomic, strong) NSNumber *graduation;
 @property(nonatomic, strong) NSNumber *friendState;
+@property(nonatomic, strong) NSNumber *common_count;
 @property(nonatomic, strong) NSString *faculty_name;
 @property(nonatomic, strong) NSString *university_name;
 @property(nonatomic, strong) NSString *books;
@@ -278,6 +281,7 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) NSString *twitter;
 @property(nonatomic, strong) NSString *skype;
 @property(nonatomic, strong) NSString *facebook;
+@property(nonatomic, strong) NSString *instagram;
 @property(nonatomic, strong) NSString *livejournal;
 @property(nonatomic, strong) NSString *wall_default;
 
@@ -290,5 +294,5 @@ typedef NS_ENUM(NSInteger, NameCase) {
 /**
  Array of API users
  */
-@interface VKUsersArray : VKApiObjectArray
+@interface VKUsersArray : VKApiObjectArray<VKUser*>
 @end

@@ -22,4 +22,8 @@
     return [VKVideo class];
 }
 
+- (Class)objectClass{
+    return [VKVideo class];
+}
+
 @end

@@ -21,7 +21,7 @@
 //  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "VKApiObjectArray.h"
-
+#import "VKUtil.h"
 
 @interface VKApiObjectArray ()
 @property(nonatomic, readwrite) NSUInteger count;
@@ -29,7 +29,7 @@
 
 @implementation VKApiObjectArray
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
-    return [self initWithDictionary:dict objectClass:[self.class objectClass]];
+    return [self initWithDictionary:dict objectClass:[self objectClass]];
 }
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict objectClass:(Class)objectClass {
@@ -38,8 +38,9 @@
         self = [self initWithArray:response objectClass:objectClass];
     }
     else {
-        self = [super initWithDictionary:response ? response : dict];
-        self.items = [self parseItems:self.items asClass:objectClass];
+        NSDictionary *targetDict = VK_ENSURE_DICT(response ? response : dict);
+        self = [super initWithDictionary:targetDict];
+        self.items = [self parseItems:VK_ENSURE_ARRAY(targetDict[@"items"]) asClass:objectClass];
     }
 
     return self;
@@ -54,7 +55,7 @@
 }
 
 - (instancetype)initWithArray:(NSArray *)array {
-    return [self initWithArray:array objectClass:[self.class objectClass]];
+    return [self initWithArray:array objectClass:self.objectClass];
 }
 
 - (NSMutableArray *)parseItems:(NSArray *)toParse asClass:(Class)objectClass {
@@ -137,6 +138,10 @@
 }
 
 + (Class)objectClass {
+    return [VKApiObject class];
+}
+
+- (Class)objectClass {
     return [VKApiObject class];
 }
 

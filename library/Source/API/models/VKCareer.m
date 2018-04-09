@@ -18,4 +18,8 @@
     return [VKCareer class];
 }
 
+- (Class)objectClass{
+    return [VKCareer class];
+}
+
 @end

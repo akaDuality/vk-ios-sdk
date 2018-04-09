@@ -28,7 +28,13 @@
 @end
 
 @implementation VKDocsArray
-- (instancetype)initWithDictionary:(NSDictionary *)dict {
-  return [super initWithDictionary:dict objectClass:[VKDocs class]];
+
++ (Class)objectClass {
+    return [VKDocs class];
 }
+
+- (Class)objectClass {
+    return [VKDocs class];
+}
+
 @end

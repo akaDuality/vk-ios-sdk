@@ -27,7 +27,12 @@
 @end
 
 @implementation VKAudios
+
 + (Class)objectClass {
+    return [VKAudio class];
+}
+
+- (Class)objectClass {
     return [VKAudio class];
 }
 

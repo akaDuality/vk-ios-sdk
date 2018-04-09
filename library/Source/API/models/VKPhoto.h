@@ -77,5 +77,5 @@
 /**
  Array of API photos objects
  */
-@interface VKPhotoArray : VKApiObjectArray
+@interface VKPhotoArray : VKApiObjectArray<VKPhoto*>
 @end

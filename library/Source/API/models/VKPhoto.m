@@ -63,4 +63,8 @@
     return [VKPhoto class];
 }
 
+- (Class)objectClass{
+    return [VKPhoto class];
+}
+
 @end

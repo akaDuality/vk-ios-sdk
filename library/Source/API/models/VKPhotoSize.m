@@ -14,7 +14,12 @@
 @implementation VKPhotoSizes {
     NSDictionary *sizesDictionary;
 }
+
 + (Class)objectClass {
+    return [VKPhotoSize class];
+}
+
+- (Class)objectClass {
     return [VKPhotoSize class];
 }
 

@@ -39,7 +39,6 @@ static NSString *const BOOL_NAME = @"bool";
 static NSString *const ID_NAME = @"id";
 
 
-
 static NSString *getPropertyType(objc_property_t property) {
     const char *type = property_getAttributes(property);
     NSString *typeString = [NSString stringWithUTF8String:type];
@@ -162,14 +161,19 @@ static NSString *getPropertyName(objc_property_t prop) {
 }
 
 - (void)parse:(NSDictionary *)dict {
+    static NSMutableDictionary *classesProperties = nil;
+    static dispatch_semaphore_t classSemaphore = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _classesProperties = [NSMutableDictionary dictionary];
+        classesProperties = [NSMutableDictionary dictionary];
+        classSemaphore = dispatch_semaphore_create(1);
     });
     NSString *className = NSStringFromClass(self.class);
     __block NSMutableDictionary *propDict = nil;
+    
+    dispatch_semaphore_wait(classSemaphore, DISPATCH_TIME_FOREVER);
     @synchronized (_classesProperties) {
-        propDict = [_classesProperties objectForKey:className];
+        propDict = [classesProperties objectForKey:className];
     }
     if (!propDict) {
         [self enumPropertiesWithBlock:^(VKPropertyHelper * helper, int totalProps) {
@@ -182,9 +186,10 @@ static NSString *getPropertyName(objc_property_t prop) {
             propDict = [NSMutableDictionary new];
         }
         @synchronized (_classesProperties) {
-            _classesProperties[className] = propDict;
+            classesProperties[className] = propDict;
         }
     }
+    dispatch_semaphore_signal(classSemaphore);
     NSMutableArray *warnings = PRINT_PARSE_DEBUG_INFO ? [NSMutableArray new] : nil;
     for (__strong NSString *key in dict) {
         id resultObject = nil;
@@ -293,7 +298,7 @@ static NSString *getPropertyName(objc_property_t prop) {
     NSString *resultClassName = className;
     
     if ([arrayClass isSubclassOfClass:[VKApiObjectArray class]]){
-        resultClassName = NSStringFromClass([(VKApiObjectArray *)arrayClass objectClass]);
+        resultClassName = NSStringFromClass([arrayClass objectClass]);
     } else {
         NSLog(@"❌ Don't know how to parse array '%@'", className);
     }

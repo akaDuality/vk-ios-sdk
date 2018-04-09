@@ -45,6 +45,6 @@
 @property (nonatomic, strong) NSNumber *date;
 @end
 
-@interface VKAudios : VKApiObjectArray
+@interface VKAudios : VKApiObjectArray<VKAudio*>
 @property(nonatomic, strong) VKUser *user;
 @end

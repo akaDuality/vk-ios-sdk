@@ -435,7 +435,7 @@ static NSString *VK_ACCESS_TOKEN_DEFAULTS_KEY = @"VK_ACCESS_TOKEN_DEFAULTS_KEY_D
                 }
             } else if (error) {
                 instance.authState = VKAuthorizationError;
-                instance.accessToken = nil;
+//                instance.accessToken = nil; No need to remove sdk token when there is no Internet
 
                 VKError *vkError = error.vkError;
                 if (vkError.errorCode == 5) {

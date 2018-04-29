@@ -36,7 +36,7 @@
 
 - (VKPhotoSize *)photoSizeWithType:(NSString *)type {
     for(VKPhotoSize * size in self.items){
-        if([size.type isEqualToString:type])
+        if([size.type isEqual:type])
             return size;
     }
     return nil;

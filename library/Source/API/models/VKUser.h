@@ -246,7 +246,8 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) VKUniversities *universities;
 @property(nonatomic, strong) VKSchools *schools;
 @property(nonatomic, strong) NSNumber *graduation;
-@property(nonatomic, strong) NSNumber *friendState;
+@property(nonatomic, strong) NSNumber *friend_status;
+@property(nonatomic, strong) NSNumber *is_favorite;
 @property(nonatomic, strong) NSNumber *common_count;
 @property(nonatomic, strong) NSString *faculty_name;
 @property(nonatomic, strong) NSString *university_name;

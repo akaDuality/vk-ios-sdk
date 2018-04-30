@@ -114,6 +114,7 @@
 @property(nonatomic, assign) NSInteger invite_state;
 @property(nonatomic, strong) NSString *deactivated;
 @property(nonatomic, strong) NSNumber *blacklisted;
+@property(nonatomic, strong) NSNumber *is_favorite;
 
 @end
 

@@ -115,6 +115,7 @@
 @property(nonatomic, strong) NSString *deactivated;
 @property(nonatomic, strong) NSNumber *blacklisted;
 @property(nonatomic, strong) NSNumber *is_favorite;
+@property(nonatomic, strong) NSNumber *is_hidden_from_feed;
 
 @end
 

@@ -287,6 +287,7 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) NSString *wall_default;
 
 @property(nonatomic, strong) NSNumber *followers_count;
+@property(nonatomic, strong) NSNumber *is_hidden_from_feed;
 
 @property (nonatomic, strong)   VKCareersArray *  career;
 

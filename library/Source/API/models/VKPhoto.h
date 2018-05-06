@@ -62,6 +62,11 @@
 
     @property (nonatomic, strong)           VKCount *       tags;
 
+    @property (nonatomic, strong)           NSNumber *      lat;
+//    @property (nonatomic, strong)           NSNumber *      longtitude;
+
+    @property (nonatomic, strong)           NSNumber *reposts;
+
     @property (nonatomic, strong)           UIImage *       uploadingObject;
     @property (nonatomic, assign)           float           uploadingProgress;
     @property (nonatomic, assign)           NSString *      uploadingPhotoURL;

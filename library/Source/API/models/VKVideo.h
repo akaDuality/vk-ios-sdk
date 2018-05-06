@@ -27,10 +27,22 @@
 @property (nonatomic) NSString  *photo_640;
 @property (nonatomic) NSString  *photo_800;
 
+@property (nonatomic) NSString *first_frame_800;
+@property (nonatomic) NSString *first_frame_160;
+@property (nonatomic) NSString *first_frame_130;
+@property (nonatomic) NSString *first_frame_320;
+
+@property (nonatomic) NSNumber *height;
+@property (nonatomic) NSNumber *width;
+
 @property (nonatomic) NSString *link;
 @property (strong, nonatomic) NSString *access_key;
+@property (nonatomic) NSNumber *can_add;
+@property (nonatomic) NSNumber *can_edit;
+@property (nonatomic) NSNumber *reposts;
 
-
+@property (nonatomic) NSString *adding_date;
+@property (nonatomic) NSString *platform;
 
 @property (nonatomic) NSString *player;
 

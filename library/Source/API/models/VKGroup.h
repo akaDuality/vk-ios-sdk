@@ -116,6 +116,7 @@
 @property(nonatomic, strong) NSNumber *blacklisted;
 @property(nonatomic, strong) NSNumber *is_favorite;
 @property(nonatomic, strong) NSNumber *is_hidden_from_feed;
+@property(nonatomic, strong) NSNumber *can_message;
 
 @end
 

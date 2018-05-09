@@ -238,7 +238,7 @@ typedef NS_ENUM(NSInteger, NameCase) {
 @property(nonatomic, strong) NSString *nickname;
 @property(nonatomic, strong) VKExports *exports;
 @property(nonatomic, strong) NSNumber *wall_comments;
-@property(nonatomic, assign) BOOL can_write_private_message;
+@property(nonatomic, assign) NSNumber *can_write_private_message;
 @property(nonatomic, assign) BOOL can_see_audio;
 @property(nonatomic, strong) NSString *phone;
 @property(nonatomic, strong) NSNumber *faculty;

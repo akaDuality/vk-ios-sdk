@@ -45,6 +45,7 @@
 @property (nonatomic) NSString *platform;
 
 @property (nonatomic) NSString *player;
+@property (nonatomic) NSNumber *user_id;
 
 
 #pragma mark Extended
